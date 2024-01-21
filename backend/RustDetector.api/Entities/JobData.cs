@@ -4,6 +4,7 @@ namespace RustDetector.api.Entities;
 
 public class JobData
 {
+    [Required]
     public int Id { get; set; }
     
     [Required]

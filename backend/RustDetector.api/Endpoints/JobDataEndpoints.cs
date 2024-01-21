@@ -9,27 +9,35 @@ public static class JobDataEndpoints
     
     public static RouteGroupBuilder MapJobDataEndpoints(this IEndpointRouteBuilder routes)
     {
-        JobDataRepository repository = new JobDataRepository();
-        
         var group = routes.MapGroup("/jobdata")
             .WithParameterValidation();
 
-        group.MapGet("/", () => repository.GetAll());
+        group.MapGet("/", (IJobDataRepository repository) => 
+            repository.GetAll().Select(jobData => jobData.AsDto()));
 
-        group.MapGet("/{id}", (int id) =>
+        group.MapGet("/{id}", (IJobDataRepository repository, int id) =>
         {
             JobData? jobData = repository.Get(id);
-            return jobData is not null ? Results.Ok(jobData) : Results.NotFound();
+            return jobData is not null ? Results.Ok(jobData.AsDto()) : Results.NotFound();
         }).WithName(JobDataEndpointName);
 
-        group.MapPost("/", (JobData jobData) =>
+        group.MapPost("/", (IJobDataRepository repository, CreateJobDataDto jobDataDto) =>
         {
+            JobData jobData = new()
+            {
+                Id = jobDataDto.Id,
+                Month = jobDataDto.Month,
+                Year = jobDataDto.Year,
+                RustCount = jobDataDto.RustCount,
+                GoCount = jobDataDto.GoCount,
+                PythonCount = jobDataDto.PythonCount
+            };
             repository.Create(jobData);
 
             return Results.CreatedAtRoute(JobDataEndpointName, new {id = jobData.Id}, jobData);
         });
 
-        group.MapPut("/{id}", (int id, JobData updatedJobData) =>
+        group.MapPut("/{id}", (IJobDataRepository repository, int id, UpdateJobDataDto updatedJobDataDto) =>
         {
             JobData? existingJobData = repository.Get(id);
 
@@ -38,15 +46,15 @@ public static class JobDataEndpoints
                 return Results.NotFound();
             }
 
-            existingJobData.RustCount = updatedJobData.RustCount;
-            existingJobData.GoCount = updatedJobData.GoCount;
-            existingJobData.PythonCount = updatedJobData.PythonCount;
+            existingJobData.RustCount = updatedJobDataDto.RustCount;
+            existingJobData.GoCount = updatedJobDataDto.GoCount;
+            existingJobData.PythonCount = updatedJobDataDto.PythonCount;
             repository.Update(existingJobData);
             
             return Results.NoContent();
         });
 
-        group.MapDelete("/{id}", (int id) =>
+        group.MapDelete("/{id}", (IJobDataRepository repository, int id) =>
         {
             JobData? jobData = repository.Get(id);
 

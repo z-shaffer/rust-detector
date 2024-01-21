@@ -2,7 +2,7 @@ using RustDetector.api.Entities;
 
 namespace RustDetector.api.Repositories;
 
-public class JobDataRepository
+public class JobDataRepository : IJobDataRepository
 {
     private readonly List<JobData> _jobDataList = new()
     {
