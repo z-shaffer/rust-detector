@@ -60,7 +60,7 @@ public static class JobDataEndpoints
 
             if (jobData is not null)
             {
-                repository.DeleteAsync(id);
+                await repository.DeleteAsync(id);
             }
 
             return Results.NoContent();
