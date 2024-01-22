@@ -12,16 +12,16 @@ public static class JobDataEndpoints
         var group = routes.MapGroup("/jobdata")
             .WithParameterValidation();
 
-        group.MapGet("/", (IJobDataRepository repository) => 
-            repository.GetAll().Select(jobData => jobData.AsDto()));
+        group.MapGet("/", async (IJobDataRepository repository) => 
+            (await repository.GetAllAsync()).Select(jobData => jobData.AsDto()));
 
-        group.MapGet("/{id}", (IJobDataRepository repository, int id) =>
+        group.MapGet("/{id}", async (IJobDataRepository repository, int id) =>
         {
-            JobData? jobData = repository.Get(id);
+            JobData? jobData = await repository.GetAsync(id);
             return jobData is not null ? Results.Ok(jobData.AsDto()) : Results.NotFound();
         }).WithName(JobDataEndpointName);
 
-        group.MapPost("/", (IJobDataRepository repository, CreateJobDataDto jobDataDto) =>
+        group.MapPost("/", async (IJobDataRepository repository, CreateJobDataDto jobDataDto) =>
         {
             JobData jobData = new()
             {
@@ -32,14 +32,14 @@ public static class JobDataEndpoints
                 GoCount = jobDataDto.GoCount,
                 PythonCount = jobDataDto.PythonCount
             };
-            repository.Create(jobData);
+            await repository.CreateAsync(jobData);
 
             return Results.CreatedAtRoute(JobDataEndpointName, new {id = jobData.Id}, jobData);
         });
 
-        group.MapPut("/{id}", (IJobDataRepository repository, int id, UpdateJobDataDto updatedJobDataDto) =>
+        group.MapPut("/{id}", async (IJobDataRepository repository, int id, UpdateJobDataDto updatedJobDataDto) =>
         {
-            JobData? existingJobData = repository.Get(id);
+            JobData? existingJobData = await repository.GetAsync(id);
 
             if (existingJobData is null)
             {
@@ -49,18 +49,18 @@ public static class JobDataEndpoints
             existingJobData.RustCount = updatedJobDataDto.RustCount;
             existingJobData.GoCount = updatedJobDataDto.GoCount;
             existingJobData.PythonCount = updatedJobDataDto.PythonCount;
-            repository.Update(existingJobData);
+            await repository.UpdateAsync(existingJobData);
             
             return Results.NoContent();
         });
 
-        group.MapDelete("/{id}", (IJobDataRepository repository, int id) =>
+        group.MapDelete("/{id}", async (IJobDataRepository repository, int id) =>
         {
-            JobData? jobData = repository.Get(id);
+            JobData? jobData = await repository.GetAsync(id);
 
             if (jobData is not null)
             {
-                repository.Delete(id);
+                repository.DeleteAsync(id);
             }
 
             return Results.NoContent();

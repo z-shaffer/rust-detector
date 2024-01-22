@@ -4,9 +4,9 @@ namespace RustDetector.api.Repositories;
 
 public interface IJobDataRepository
 {
-    IEnumerable<JobData> GetAll();
-    JobData? Get(int id);
-    void Create(JobData jobData);
-    void Update(JobData updatedJobData);
-    void Delete(int id);
+    Task<IEnumerable<JobData>> GetAllAsync();
+    Task<JobData?> GetAsync(int id);
+    Task CreateAsync(JobData jobData);
+    Task UpdateAsync(JobData updatedJobData);
+    Task DeleteAsync(int id);
 }

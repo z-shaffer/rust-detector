@@ -6,31 +6,31 @@ namespace RustDetector.api.Repositories;
 
 public class EntityFrameworkJobDataRepository(JobDataContext dbContext) : IJobDataRepository
 {
-    public IEnumerable<JobData> GetAll()
+    public async Task<IEnumerable<JobData>> GetAllAsync()
     {
-        return dbContext.JobDataSet.AsNoTracking().ToList();
+        return await dbContext.JobDataSet.AsNoTracking().ToListAsync();
     }
 
-    public JobData? Get(int id)
+    public async Task<JobData?> GetAsync(int id)
     {
-        return dbContext.JobDataSet.Find(id);
+        return await dbContext.JobDataSet.FindAsync(id);
     }
 
-    public void Create(JobData jobData)
+    public async Task CreateAsync(JobData jobData)
     {
         dbContext.JobDataSet.Add(jobData);
-        dbContext.SaveChanges();
+        await dbContext.SaveChangesAsync();
     }
 
-    public void Update(JobData updatedJobData)
+    public async Task UpdateAsync(JobData updatedJobData)
     {
         dbContext.Update(updatedJobData);
-        dbContext.SaveChanges();
+        await dbContext.SaveChangesAsync();
     }
 
-    public void Delete(int id)
+    public async Task DeleteAsync(int id)
     {
-        dbContext.JobDataSet.Where(jobData => jobData.Id == id)
-            .ExecuteDelete();
+        await dbContext.JobDataSet.Where(jobData => jobData.Id == id)
+            .ExecuteDeleteAsync();
     }
 }
