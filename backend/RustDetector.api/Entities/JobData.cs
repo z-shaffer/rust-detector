@@ -7,12 +7,8 @@ public class JobData
     [Required]
     public int Id { get; set; }
     
-    [Required]
-    [Range(1, 12, ErrorMessage = "Please enter a valid integer within the range of 1 to 12.")]
     public required int Month { get; set; }
     
-    [Required] 
-    [Range(2023, 3000, ErrorMessage = "Please enter a valid integer within the range of 2023 to 3000.")]
     public required int Year { get; set; }
     
     public int RustCount { get; set; }

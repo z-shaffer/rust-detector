@@ -33,16 +33,15 @@ def main():
     go_count = scraper(target_pattern, "go")
     # cpp_count = scraper(target_pattern, "c++")
 
-    url = 'http://localhost:8080/api/v1/jobdata'
+    url = 'http://localhost:1433/jobdata'
     data = {
         "rustCount": rust_count,
         "pythonCount": python_count,
         "goCount": go_count
     }
-    SPRING_SECURITY_USER = os.environ['SPRING_SECURITY_USER']
-    SPRING_SECURITY_PASS = os.environ['SPRING_SECURITY_PASS']
     headers = {'Content-type': 'application/json'}
-    response = requests.post(url, auth=HTTPBasicAuth(SPRING_SECURITY_USER, SPRING_SECURITY_PASS), data=json.dumps(data), headers=headers)
+    response = requests.post(url, data=json.dumps(data), headers=headers)
+    print(response)
 
 
 if __name__ == "__main__":

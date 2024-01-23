@@ -17,7 +17,7 @@ public static class JobDataEndpoints
 
         group.MapGet("/{id}", async (IJobDataRepository repository, int id) =>
         {
-            JobData? jobData = await repository.GetAsync(id);
+            var jobData = await repository.GetAsync(id);
             return jobData is not null ? Results.Ok(jobData.AsDto()) : Results.NotFound();
         }).WithName(JobDataEndpointName);
 
@@ -26,8 +26,8 @@ public static class JobDataEndpoints
             JobData jobData = new()
             {
                 Id = jobDataDto.Id,
-                Month = jobDataDto.Month,
-                Year = jobDataDto.Year,
+                Month = DateTime.Now.Month,
+                Year = DateTime.Now.Year,
                 RustCount = jobDataDto.RustCount,
                 GoCount = jobDataDto.GoCount,
                 PythonCount = jobDataDto.PythonCount
@@ -39,7 +39,7 @@ public static class JobDataEndpoints
 
         group.MapPut("/{id}", async (IJobDataRepository repository, int id, UpdateJobDataDto updatedJobDataDto) =>
         {
-            JobData? existingJobData = await repository.GetAsync(id);
+            var existingJobData = await repository.GetAsync(id);
 
             if (existingJobData is null)
             {
@@ -56,7 +56,7 @@ public static class JobDataEndpoints
 
         group.MapDelete("/{id}", async (IJobDataRepository repository, int id) =>
         {
-            JobData? jobData = await repository.GetAsync(id);
+            var jobData = await repository.GetAsync(id);
 
             if (jobData is not null)
             {
