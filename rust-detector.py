@@ -1,9 +1,7 @@
-import os
 import re
 import requests
 import json
 from bs4 import BeautifulSoup
-from requests.auth import HTTPBasicAuth
 
 
 def find_target_pattern(tag, target_pattern):
