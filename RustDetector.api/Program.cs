@@ -9,7 +9,7 @@ var app = builder.Build();
 
 await app.Services.InitializeDbAsync();
 
-app.UseMiddleware<RestrictToLocalhostMiddleware>();
+//app.UseMiddleware<RestrictToLocalhostMiddleware>();
 
 app.MapJobDataEndpoints();
 
