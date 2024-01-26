@@ -31,7 +31,7 @@ def main():
     go_count = scraper(target_pattern, "go")
     # cpp_count = scraper(target_pattern, "c++")
 
-    url = 'http://rustdetector.database.windows.net:1433/jobdata'
+    url = 'http://rustdetector.azurewebsites.net/jobdata'
     data = {
         "rustCount": rust_count,
         "pythonCount": python_count,
