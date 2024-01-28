@@ -4,47 +4,45 @@
 @using System.Globalization
 
 <PageTitle>Rust Detector</PageTitle>
-
-<h1>Table View</h1>
-
-
-
-@if (_jobDataSet == null)
-{
-    <p>
-        <em>Loading...</em>
-    </p>
-}
-else
-{
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Month No.</th>
-            <th>Month</th>
-            <th>Year</th>
-            <th>Rust Job Openings</th>
-            <th>Go Job Openings</th>
-            <th>Python Job Openings</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var jobdata in _jobDataSet)
-        {
+<div class="d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+    @if (isLoading)
+    {
+        <div class="spinner-border" role="status">
+            <span class="sr-only">Detecting...</span>
+        </div>
+    }
+    else
+    {
+        <table class="table">
+            <thead>
             <tr>
-                <td>@jobdata.id</td>
-                <td>@CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(jobdata.month)</td>
-                <td>@jobdata.year</td>
-                <td>@jobdata.rustCount</td>
-                <td>@jobdata.goCount</td>
-                <td>@jobdata.pythonCount</td>
+                <th>Month No.</th>
+                <th>Month</th>
+                <th>Year</th>
+                <th>Rust Job Openings</th>
+                <th>Go Job Openings</th>
+                <th>Python Job Openings</th>
             </tr>
-        }
-        </tbody>
-    </table>
-}
+            </thead>
+            <tbody>
+            @foreach (var jobdata in _jobDataSet)
+            {
+                <tr>
+                    <td>@jobdata.id</td>
+                    <td>@CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(jobdata.month)</td>
+                    <td>@jobdata.year</td>
+                    <td>@jobdata.rustCount</td>
+                    <td>@jobdata.goCount</td>
+                    <td>@jobdata.pythonCount</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    }</div>
 
 @code {
+    private bool isLoading = true;
+    
     public class JobData
     {
         public int id { get; set; }
@@ -70,6 +68,8 @@ else
 
     protected override async Task OnInitializedAsync()
     {
+        isLoading = true;
         await this.RefreshJobDataSet();
+        isLoading = false;
     }
 }

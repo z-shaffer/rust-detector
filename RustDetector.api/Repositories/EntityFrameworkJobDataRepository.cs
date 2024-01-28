@@ -15,7 +15,16 @@ public class EntityFrameworkJobDataRepository(JobDataContext dbContext) : IJobDa
     {
         if (!_cache.TryGetValue(DataKey, out IEnumerable<JobData> cachedData))
         {
-            cachedData = await dbContext.JobDataSet.AsNoTracking().ToListAsync();
+            var rawData = await dbContext.JobDataSet.AsNoTracking().ToListAsync();
+            cachedData = rawData.Select(item => new JobData
+            {
+                Id = item.Id,
+                Month = item.Month,
+                Year = item.Year,
+                GoCount = item.GoCount,
+                PythonCount = item.PythonCount,
+                RustCount = item.RustCount
+            }).ToList();
             _cache.Set(DataKey, cachedData, DateTime.Now.Add(_cacheExpiration));
         }
 
