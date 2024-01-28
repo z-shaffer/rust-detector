@@ -8,19 +8,8 @@
 <script src="./graphInterop.js"></script>
 
 <PageTitle>Rust Detector</PageTitle>
-<div class="d-flex justify-content-center align-items-center" style="min-height: 100vh;">
-    @if (isLoading)
-    {
-        <div class="spinner-border" role="status">
-            <span class="sr-only">Detecting...</span>
-        </div>
-    }
-    else
-    {
-        <div>
-            <canvas id="graph"></canvas>
-        </div>
-    }
+<div>
+    <canvas id="graph"></canvas>
 </div>
 
 @code {
@@ -54,9 +43,7 @@
     {
         if (firstRender)
         {
-            isLoading = true;
             await InitializeGraph();
-            isLoading = false;
         }
     }
 }
