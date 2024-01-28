@@ -20,7 +20,8 @@ public static class DataExtensions
         var connString = configuration.GetConnectionString("JobDataContext");
         services.AddSqlServer<JobDataContext>(connString)
             .AddScoped<IJobDataRepository, EntityFrameworkJobDataRepository>();
-        
+        services.AddMemoryCache();
+        services.AddScoped<IJobDataRepository, EntityFrameworkJobDataRepository>();
         return services;
     }
 }

@@ -5,27 +5,17 @@ using RustDetector.api.Entities;
 
 namespace RustDetector.api.Repositories;
 
-public class EntityFrameworkJobDataRepository(JobDataContext dbContext) : IJobDataRepository
+public class EntityFrameworkJobDataRepository(JobDataContext context, IMemoryCache cache) : IJobDataRepository
 {
-    private readonly IMemoryCache _cache;
     private readonly TimeSpan _cacheExpiration = GetDaysUntilEndOfMonth();
-    private readonly string DataKey = "JobDataCache";
-    
+    private const string DataKey = "JobDataCache";
+
     public async Task<IEnumerable<JobData>> GetAllAsync()
     {
-        if (!_cache.TryGetValue(DataKey, out IEnumerable<JobData> cachedData))
+        if (!cache.TryGetValue(DataKey, out IEnumerable<JobData> cachedData))
         {
-            var rawData = await dbContext.JobDataSet.AsNoTracking().ToListAsync();
-            cachedData = rawData.Select(item => new JobData
-            {
-                Id = item.Id,
-                Month = item.Month,
-                Year = item.Year,
-                GoCount = item.GoCount,
-                PythonCount = item.PythonCount,
-                RustCount = item.RustCount
-            }).ToList();
-            _cache.Set(DataKey, cachedData, DateTime.Now.Add(_cacheExpiration));
+            cachedData = await context.JobDataSet.AsNoTracking().ToListAsync();
+            cache.Set(DataKey, cachedData, DateTime.Now.Add(_cacheExpiration));
         }
 
         return cachedData;
@@ -33,24 +23,24 @@ public class EntityFrameworkJobDataRepository(JobDataContext dbContext) : IJobDa
 
     public async Task<JobData?> GetAsync(int id)
     {
-        return await dbContext.JobDataSet.FindAsync(id);
+        return await context.JobDataSet.FindAsync(id);
     }
 
     public async Task CreateAsync(JobData jobData)
     {
-        dbContext.JobDataSet.Add(jobData);
-        await dbContext.SaveChangesAsync();
+        context.JobDataSet.Add(jobData);
+        await context.SaveChangesAsync();
     }
 
     public async Task UpdateAsync(JobData updatedJobData)
     {
-        dbContext.Update(updatedJobData);
-        await dbContext.SaveChangesAsync();
+        context.Update(updatedJobData);
+        await context.SaveChangesAsync();
     }
 
     public async Task DeleteAsync(int id)
     {
-        await dbContext.JobDataSet.Where(jobData => jobData.Id == id)
+        await context.JobDataSet.Where(jobData => jobData.Id == id)
             .ExecuteDeleteAsync();
     }
     
