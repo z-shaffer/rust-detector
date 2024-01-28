@@ -1,22 +1,33 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">Rust Detector</a>
-    </div>
+﻿<div class="top-row ps-3 navbar navbar-dark ">
+        <a class="navbar-brand fs-4">Rust Detector</a>
 </div>
 
 <input type="checkbox" title="Navigation menu" class="navbar-toggler"/>
 
 <div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
-    <nav class="flex-column">
+    <nav class="flex-column position-absolute">
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Graph View
+                <span class="bi bi-graph-up" aria-hidden="true"></span> Graph View
             </NavLink>
         </div>
 
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="table">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Table View
+                <span class="bi bi-table" aria-hidden="true"></span> Table View
+            </NavLink>
+        </div>
+    </nav>
+    <nav class="flex-column bottom-0 position-absolute">
+        <div class="nav-item px-3 test-pos">
+            <NavLink class="nav-link" href="https://www.devjobsscanner.com/">
+                <span class="bi bi-activity" aria-hidden="true"></span> Data Source
+            </NavLink>
+        </div>
+        
+        <div class="nav-item px-3 test-pos">
+            <NavLink class="nav-link" href="https://www.linkedin.com/in/z-shaffer/">
+                <span class="bi bi-send-fill" aria-hidden="true"></span> Contact
             </NavLink>
         </div>
     </nav>
