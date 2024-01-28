@@ -1,0 +1,75 @@
+﻿@page "/table"
+@attribute [StreamRendering]
+@using System.Text.Json
+@using System.Globalization
+
+<PageTitle>Table View</PageTitle>
+
+<h1>Table View</h1>
+
+
+
+@if (_jobDataSet == null)
+{
+    <p>
+        <em>Loading...</em>
+    </p>
+}
+else
+{
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Month No.</th>
+            <th>Month</th>
+            <th>Year</th>
+            <th>Rust Job Openings</th>
+            <th>Go Job Openings</th>
+            <th>Python Job Openings</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var jobdata in _jobDataSet)
+        {
+            <tr>
+                <td>@jobdata.id</td>
+                <td>@CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(jobdata.month)</td>
+                <td>@jobdata.year</td>
+                <td>@jobdata.rustCount</td>
+                <td>@jobdata.goCount</td>
+                <td>@jobdata.pythonCount</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+@code {
+    private class JobData
+    {
+        public int id { get; set; }
+        public int month { get; set; }
+        public int year { get; set; }
+        public int rustCount { get; set; }
+        public int goCount { get; set; }
+        public int pythonCount { get; set; }
+    }
+
+    string _apiUrl = "https://rustdetector.azurewebsites.net/jobdata";
+
+    private IEnumerable<JobData>? _jobDataSet = Array.Empty<JobData>();
+
+    private async Task RefreshJobDataSet()
+    {
+        HttpClient httpClient = new HttpClient();
+        HttpResponseMessage response = await httpClient.GetAsync(_apiUrl);
+        httpClient.Dispose();
+        using var responseStream = await response.Content.ReadAsStreamAsync();
+        _jobDataSet = await JsonSerializer.DeserializeAsync<IEnumerable<JobData>>(responseStream);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await this.RefreshJobDataSet();
+    }
+}
