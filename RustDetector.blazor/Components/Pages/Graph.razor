@@ -1,0 +1,56 @@
+﻿@page "/"
+@using System.Text.Json
+@using System.Globalization
+@inject IJSRuntime JSRuntime
+@rendermode InteractiveServer
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="./graphInterop.js"></script>
+
+<PageTitle>Graph View</PageTitle>
+@if (_jobDataSet == null)
+{
+    <p>
+        <em>Loading...</em>
+    </p>
+}
+else
+{
+    <div>
+        <canvas id="graph"></canvas>
+    </div>
+}
+
+@code {
+    public class JobData
+    {
+        public int id { get; set; }
+        public int month { get; set; }
+        public int year { get; set; }
+        public int rustCount { get; set; }
+        public int goCount { get; set; }
+        public int pythonCount { get; set; }
+    }
+
+    string _apiUrl = "https://rustdetector.azurewebsites.net/jobdata";
+    
+    private IEnumerable<JobData>? _jobDataSet = Array.Empty<JobData>();
+    
+    private async Task InitializeGraph()
+    {
+        HttpClient httpClient = new HttpClient();
+        HttpResponseMessage response = await httpClient.GetAsync(_apiUrl);
+        httpClient.Dispose();
+        using var responseStream = await response.Content.ReadAsStreamAsync();
+        _jobDataSet = await JsonSerializer.DeserializeAsync<IEnumerable<JobData>>(responseStream);
+        await JSRuntime.InvokeVoidAsync("initializeLineGraph", _jobDataSet);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await InitializeGraph();
+        }
+    }
+}
