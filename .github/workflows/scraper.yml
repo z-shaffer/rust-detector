@@ -1,13 +1,11 @@
 name: Rust Detector Scraper
 
 on:
-  push:
-    branches:
-      - main
+  schedule:
+    - cron: '0 12 28-31 * *'
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -24,5 +22,10 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt  # Replace with your dependencies file
 
-    - name: Run Python App
-      run: python rust-detector.py  # Replace with the main entry point of your app
+    - name: Check if it's the last day of the month
+      run: |
+        if [ $(date +\%d -d tomorrow) -eq 1 ]; then
+          python rust-detector.py
+        else
+          echo "Not the last day of the month. Maybe tomorrow..."
+        fi
