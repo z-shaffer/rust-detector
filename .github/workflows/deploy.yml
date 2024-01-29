@@ -75,7 +75,7 @@ jobs:
       - name: Deploy Backend to Azure Web App
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'rustdetector'
+          app-name: 'rust-detector'
           slot-name: 'Production'
           package: D:\a\rust-detector\rust-detector\backend
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_D3196DCE27274553A3C438185ECE00E7 }}
@@ -88,7 +88,7 @@ jobs:
       - name: Deploy Frontend to Azure Web App
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'rustdetector'
+          app-name: 'rust-detector'
           slot-name: 'Production'
           package: D:\a\rust-detector\rust-detector\frontend
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_D3196DCE27274553A3C438185ECE00E7 }}
