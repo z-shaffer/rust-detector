@@ -40,22 +40,6 @@ jobs:
           name: backend-artifact
           path: D:\a\rust-detector\rust-detector\backend
 
-      - name: dotnet build Frontend (Blazor Server App)
-        run: |
-          cd RustDetector.blazor
-          dotnet restore
-          dotnet build --configuration Release
-
-      - name: dotnet publish Frontend (Blazor Server App)
-        run: |
-          dotnet publish ./RustDetector.blazor/RustDetector.blazor.csproj -c Release -o D:\a\rust-detector\rust-detector\frontend
-
-      - name: Upload frontend artifact for deployment
-        uses: actions/upload-artifact@v2
-        with:
-          name: frontend-artifact
-          path: D:\a\rust-detector\rust-detector\frontend
-
   deploy:
     runs-on: windows-latest
     needs: build
@@ -63,44 +47,15 @@ jobs:
       name: 'Production'
 
     steps:
-      - name: Logging root pre-download
-        run: |
-          ls .
-          
-      - name: Download Frontend artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: frontend-artifact
-
-      - name: Logging root post-download
-        run: |
-          ls .
-          
-      - name: Deploy Frontend to Azure Web App
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: 'rustdetector.blazor'
-          slot-name: 'Production'
-          package: D:\a\rust-detector\rust-detector
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_D3196DCE27274553A3C438185ECE00E7 }} 
-          
-      - name: Logging root pre-download
-        run: |
-          ls .
-    
       - name: Download Backend artifact
         uses: actions/download-artifact@v2
         with:
           name: backend-artifact
 
-      - name: Logging root post-download
-        run: |
-          ls .
-
       - name: Deploy Backend to Azure Web App
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'rustdetector.api'
+          app-name: 'rustdetector'
           slot-name: 'Production'
           package: D:\a\rust-detector\rust-detector
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_D3196DCE27274553A3C438185ECE00E7 }}
