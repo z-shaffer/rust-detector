@@ -24,27 +24,20 @@ jobs:
           cd RustDetector.api
           dotnet build --configuration Release
 
-  publish:
-    runs-on: windows-latest
-    needs: build
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Setup .NET Core
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: '8.0'
-
       - name: Publish Backend (ASP.NET Core)
         run: |
           cd RustDetector.api
           dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
+      - name: Upload artifact for backend deployment
+        uses: actions/upload-artifact@v2
+        with:
+          name: backend-artifact
+          path: ${{env.DOTNET_ROOT}}/myapp
+
   deploy:
     runs-on: windows-latest
-    needs: publish
+    needs: build
     environment:
       name: 'Production'
     
@@ -52,7 +45,7 @@ jobs:
       - name: Download Backend artifact
         uses: actions/download-artifact@v2
         with:
-          name: myapp
+          name: backend-artifact
 
       - name: Deploy Backend to Azure Web App
         uses: azure/webapps-deploy@v2
