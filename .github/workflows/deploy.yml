@@ -32,7 +32,7 @@ jobs:
           ls -R .
           dotnet publish RustDetector.api.csproj -c Release -o ${{env.DOTNET_ROOT}}/backend
           echo "Contents of the directory after publish:"
-          ls -R ${{env.DOTNET_ROOT}}/backend
+          ls -R .
 
       - name: Upload backend artifact for deployment
         uses: actions/upload-artifact@v2
