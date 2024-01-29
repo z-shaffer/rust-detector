@@ -1,4 +1,4 @@
-name: Build and Deploy ASP.NET Core and Blazor Server App
+name: Build and Deploy ASP.NET Core/Blazor Server App
 
 on:
   push:
@@ -19,38 +19,22 @@ jobs:
         with:
           dotnet-version: '8.0'
 
-      - name: dotnet build Backend (ASP.NET Core)
+      - name: dotnet build app 
         run: |
           cd RustDetector.api
           dotnet restore
           dotnet build --configuration Release
 
-      - name: dotnet publish Backend (ASP.NET Core)
-        run: |
-          cd RustDetector.api
-          dotnet publish RustDetector.api.csproj -c Release -o D:\a\rust-detector\rust-detector\backend
-
-      - name: Upload backend artifact for deployment
-        uses: actions/upload-artifact@v2
-        with:
-          name: backend-artifact
-          path: D:\a\rust-detector\rust-detector\backend
-
-      - name: dotnet build Frontend (Blazor Server App)
+      - name: dotnet publish app (ASP.NET Core)
         run: |
           cd RustDetector.blazor
-          dotnet restore
-          dotnet build --configuration Release
+          dotnet publish RustDetector.blazor.csproj -c Release -o ${{env.DOTNET_ROOT}}/publish
 
-      - name: dotnet publish Frontend (Blazor Server App)
-        run: |
-          dotnet publish ./RustDetector.blazor/RustDetector.blazor.csproj -c Release -o D:\a\rust-detector\rust-detector\frontend
-
-      - name: Upload frontend artifact for deployment
+      - name: Upload artifact for deployment
         uses: actions/upload-artifact@v2
         with:
-          name: frontend-artifact
-          path: D:\a\rust-detector\rust-detector\frontend
+          name: app-artifact
+          path: ${{env.DOTNET_ROOT}}/publish
 
   deploy:
     runs-on: windows-latest
@@ -59,46 +43,15 @@ jobs:
       name: 'Production'
 
     steps:
-      - name: Logging root pre-download
-        run: |
-          ls .
-
-      - name: Download Frontend artifact
+      - name: Download artifact
         uses: actions/download-artifact@v2
         with:
-          name: frontend-artifact
-          path: D:\a\rust-detector\rust-detector\frontend
+          name: app-artifact
 
-      - name: Logging root post-download
-        run: |
-          ls .
-
-      - name: Deploy Frontend to Azure Web App
+      - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
         with:
           app-name: 'rustdetector'
           slot-name: 'Production'
-          package: D:\a\rust-detector\rust-detector\frontend
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_D3196DCE27274553A3C438185ECE00E7 }}
-
-      - name: Logging root pre-download
-        run: |
-          ls .
-
-      - name: Download Backend artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: backend-artifact
-          path: D:\a\rust-detector\rust-detector\backend
-
-      - name: Logging root post-download
-        run: |
-          ls .
-
-      - name: Deploy Backend to Azure Web App
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: 'rustdetector'
-          slot-name: 'Production'
-          package: D:\a\rust-detector\rust-detector\backend
+          package: D:\a\rust-detector\rust-detector\
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_D3196DCE27274553A3C438185ECE00E7 }}
