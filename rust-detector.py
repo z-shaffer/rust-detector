@@ -40,6 +40,8 @@ def main():
     headers = {'Content-type': 'application/json'}
     response = requests.post(url, data=json.dumps(data), headers=headers)
     print(response)
+    response = requests.get(url)
+    print(response)
 
 
 if __name__ == "__main__":

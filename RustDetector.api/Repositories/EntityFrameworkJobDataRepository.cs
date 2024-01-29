@@ -47,8 +47,8 @@ public class EntityFrameworkJobDataRepository(JobDataContext context, IMemoryCac
     private static TimeSpan GetDaysUntilEndOfMonth()
     {
         DateTime currentDate = DateTime.Now;
-        DateTime firstDayOfNextMonth = new DateTime(currentDate.Year, currentDate.Month, 1).AddMonths(1);
-        DateTime lastDayOfCurrentMonth = firstDayOfNextMonth.AddDays(-1);
+        int daysInMonth = DateTime.DaysInMonth(currentDate.Year, currentDate.Month);
+        DateTime lastDayOfCurrentMonth = new DateTime(currentDate.Year, currentDate.Month, daysInMonth);
         TimeSpan daysUntilEndOfMonth = lastDayOfCurrentMonth - currentDate;
 
         return daysUntilEndOfMonth;
