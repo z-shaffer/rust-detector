@@ -1,14 +1,20 @@
+using RustDetector.api.Data;
+using RustDetector.api.Endpoints;
 using RustDetector.blazor.Components;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddRepositories(builder.Configuration);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 builder.Services.AddHttpClient();
 var app = builder.Build();
+
+await app.Services.InitializeDbAsync();
+app.MapJobDataEndpoints();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
