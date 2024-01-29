@@ -1,4 +1,4 @@
-name: Build and Deploy ASP.NET Core and Blazor Server App
+name: Build and Deploy Blazor Server App
 
 on:
   push:
