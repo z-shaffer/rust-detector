@@ -21,7 +21,7 @@ jobs:
 
       - name: dotnet build app 
         run: |
-          cd RustDetector.api
+          cd RustDetector.blazor
           dotnet restore
           dotnet build --configuration Release
 
