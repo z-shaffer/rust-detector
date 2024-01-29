@@ -94,5 +94,5 @@ jobs:
         with:
           app-name: 'rustdetector'
           slot-name: 'Production'
-          package: D:\a\rust-detector\rust-detector\frontend
+          package: D:\a\rust-detector\rust-detector
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_D3196DCE27274553A3C438185ECE00E7 }}
