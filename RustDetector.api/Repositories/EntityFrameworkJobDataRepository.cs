@@ -7,7 +7,7 @@ namespace RustDetector.api.Repositories;
 
 public class EntityFrameworkJobDataRepository(JobDataContext context, IMemoryCache cache) : IJobDataRepository
 {
-    private readonly TimeSpan _cacheExpiration = GetDaysUntilEndOfMonth();
+    private readonly TimeSpan _cacheExpiration = TimeSpan.FromHours(24);
     private const string DataKey = "JobDataCache";
 
     public async Task<IEnumerable<JobData>> GetAllAsync()
@@ -15,7 +15,7 @@ public class EntityFrameworkJobDataRepository(JobDataContext context, IMemoryCac
         if (!cache.TryGetValue(DataKey, out IEnumerable<JobData> cachedData))
         {
             cachedData = await context.JobDataSet.AsNoTracking().ToListAsync();
-            cache.Set(DataKey, cachedData, DateTime.Now.Add(_cacheExpiration));
+            cache.Set(DataKey, cachedData, _cacheExpiration);
         }
 
         return cachedData;
@@ -44,13 +44,14 @@ public class EntityFrameworkJobDataRepository(JobDataContext context, IMemoryCac
             .ExecuteDeleteAsync();
     }
     
-    private static TimeSpan GetDaysUntilEndOfMonth()
-    {
-        DateTime currentDate = DateTime.Now;
-        int daysInMonth = DateTime.DaysInMonth(currentDate.Year, currentDate.Month);
-        DateTime lastDayOfCurrentMonth = new DateTime(currentDate.Year, currentDate.Month, daysInMonth);
-        TimeSpan daysUntilEndOfMonth = lastDayOfCurrentMonth - currentDate;
-
-        return daysUntilEndOfMonth;
-    }
+   public async Task InitializeAsync()
+   {
+       while (true)
+       {
+           await Task.Delay(_cacheExpiration);
+           IEnumerable<JobData> cachedData = await context.JobDataSet.AsNoTracking().ToListAsync();
+           cache.Set(DataKey, cachedData, _cacheExpiration);
+       }
+       
+   }
 }

@@ -10,6 +10,8 @@ public static class DataExtensions
         using var scope = serviceProvider.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<JobDataContext>();
         await dbContext.Database.MigrateAsync();
+        var jobDataRepository = scope.ServiceProvider.GetRequiredService<IJobDataRepository>();
+        jobDataRepository.InitializeAsync();
     }
 
     public static IServiceCollection AddRepositories(

@@ -9,4 +9,5 @@ public interface IJobDataRepository
     Task CreateAsync(JobData jobData);
     Task UpdateAsync(JobData updatedJobData);
     Task DeleteAsync(int id);
+    Task InitializeAsync();
 }
