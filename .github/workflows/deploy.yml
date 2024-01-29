@@ -29,10 +29,10 @@ jobs:
         run: |
           cd RustDetector.api
           echo "Contents of the directory before publish:"
-          ls -R .
+          ls ${{env.DOTNET_ROOT}}
           dotnet publish RustDetector.api.csproj -c Release -o ${{env.DOTNET_ROOT}}/backend
           echo "Contents of the directory after publish:"
-          ls -R .
+          ls ${{env.DOTNET_ROOT}}
 
       - name: Upload backend artifact for deployment
         uses: actions/upload-artifact@v2
@@ -67,6 +67,10 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: backend-artifact
+
+      - name: Logging root
+        run: |
+          ls .
 
       - name: Deploy Backend to Azure Web App
         uses: azure/webapps-deploy@v2
