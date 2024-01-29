@@ -27,14 +27,13 @@ jobs:
 
       - name: dotnet publish Backend (ASP.NET Core)
         run: |
-          cd RustDetector.api
-          dotnet publish RustDetector.api.csproj -c Release -o ${{env.DOTNET_ROOT}}/backend
+          dotnet publish ./RustDetector.api/RustDetector.api.csproj -c Release -o /backend
 
       - name: Upload backend artifact for deployment
         uses: actions/upload-artifact@v2
         with:
           name: backend-artifact
-          path: ${{env.DOTNET_ROOT}}/backend
+          path: /backend
 
       - name: dotnet build Frontend (Blazor Server App)
         run: |
@@ -44,14 +43,13 @@ jobs:
 
       - name: dotnet publish Frontend (Blazor Server App)
         run: |
-          cd RustDetector.blazor
-          dotnet publish RustDetector.blazor.csproj -c Release -o ${{env.DOTNET_ROOT}}/frontend
+          dotnet publish ./RustDetector.blazor/RustDetector.blazor.csproj -c Release -o /frontend
 
       - name: Upload frontend artifact for deployment
         uses: actions/upload-artifact@v2
         with:
           name: frontend-artifact
-          path: ${{env.DOTNET_ROOT}}/frontend
+          path: /frontend
 
   deploy:
     runs-on: windows-latest
@@ -70,7 +68,7 @@ jobs:
         with:
           app-name: 'rustdetector'
           slot-name: 'Production'
-          package: ${{env.DOTNET_ROOT}}/backend
+          package: /backend
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_D3196DCE27274553A3C438185ECE00E7 }}
 
       - name: Download Frontend artifact
@@ -83,5 +81,5 @@ jobs:
         with:
           app-name: 'rustdetector'
           slot-name: 'Production'
-          package: ${{env.DOTNET_ROOT}}/frontend
+          package: /frontend
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_D3196DCE27274553A3C438185ECE00E7 }}
