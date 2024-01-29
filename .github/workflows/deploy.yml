@@ -28,11 +28,7 @@ jobs:
       - name: dotnet publish Backend (ASP.NET Core)
         run: |
           cd RustDetector.api
-          echo "Contents of the directory before publish:"
-          ls ${{env.DOTNET_ROOT}}
           dotnet publish RustDetector.api.csproj -c Release -o D:\a\rust-detector\rust-detector\backend
-          echo "Contents of the directory after publish:"
-          ls ${{env.DOTNET_ROOT}}
 
       - name: Upload backend artifact for deployment
         uses: actions/upload-artifact@v2
@@ -71,6 +67,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: frontend-artifact
+          path: D:\a\rust-detector\rust-detector\frontend
 
       - name: Logging root post-download
         run: |
@@ -92,6 +89,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: backend-artifact
+          path: D:\a\rust-detector\rust-detector\backend
 
       - name: Logging root post-download
         run: |
