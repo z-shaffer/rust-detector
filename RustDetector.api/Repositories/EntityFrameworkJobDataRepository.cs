@@ -48,9 +48,9 @@ public class EntityFrameworkJobDataRepository(JobDataContext context, IMemoryCac
    {
        while (true)
        {
-           await Task.Delay(_cacheExpiration);
            IEnumerable<JobData> cachedData = await context.JobDataSet.AsNoTracking().ToListAsync();
            cache.Set(DataKey, cachedData, _cacheExpiration);
+           await Task.Delay(_cacheExpiration);
        }
        
    }
