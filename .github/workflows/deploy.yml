@@ -63,12 +63,16 @@ jobs:
       name: 'Production'
 
     steps:
+      - name: Logging root pre-download
+        run: |
+          ls .
+    
       - name: Download Backend artifact
         uses: actions/download-artifact@v2
         with:
           name: backend-artifact
 
-      - name: Logging root
+      - name: Logging root post-download
         run: |
           ls .
 
