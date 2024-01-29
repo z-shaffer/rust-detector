@@ -52,7 +52,7 @@ jobs:
         with:
           app-name: 'rustdetector'
           slot-name: 'Production'
-          package: ./RustDetector.api/myapp
+          package: ./RustDetector.api/bin/Release/net8.0/publish 
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_D3196DCE27274553A3C438185ECE00E7 }}
           
       - name: Checkout repository again
@@ -83,5 +83,5 @@ jobs:
         with:
           app-name: 'rustdetector'
           slot-name: 'Production'
-          package: ./RustDetector.blazor/blazorapp
+          package: ./RustDetector.blazor/bin/Release/net8.0/publish
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_D3196DCE27274553A3C438185ECE00E7 }}
