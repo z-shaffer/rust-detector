@@ -17,30 +17,48 @@ jobs:
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '8.0' 
+          dotnet-version: '8.0'
 
-      - name: Build Backend (ASP.NET Core)
+      - name: dotnet build Backend (ASP.NET Core)
         run: |
           cd RustDetector.api
+          dotnet restore
           dotnet build --configuration Release
 
-      - name: Publish Backend (ASP.NET Core)
+      - name: dotnet publish Backend (ASP.NET Core)
         run: |
           cd RustDetector.api
-          dotnet publish -c Release -o bin/Release/net8.0/publish
+          dotnet publish RustDetector.api.csproj -c Release -o ./bin/Release/net8.0/publish
 
-      - name: Upload artifact for backend deployment
+      - name: Upload backend artifact for deployment
         uses: actions/upload-artifact@v2
         with:
           name: backend-artifact
           path: ./RustDetector.api/bin/Release/net8.0/publish
+
+      - name: dotnet build Frontend (Blazor Server App)
+        run: |
+          cd RustDetector.blazor
+          dotnet restore
+          dotnet build --configuration Release
+
+      - name: dotnet publish Frontend (Blazor Server App)
+        run: |
+          cd RustDetector.blazor
+          dotnet publish RustDetector.blazor.csproj -c Release -o ./bin/Release/net8.0/publish
+
+      - name: Upload frontend artifact for deployment
+        uses: actions/upload-artifact@v2
+        with:
+          name: frontend-artifact
+          path: ./RustDetector.blazor/bin/Release/net8.0/publish
 
   deploy:
     runs-on: windows-latest
     needs: build
     environment:
       name: 'Production'
-    
+
     steps:
       - name: Download Backend artifact
         uses: actions/download-artifact@v2
@@ -52,31 +70,13 @@ jobs:
         with:
           app-name: 'rustdetector'
           slot-name: 'Production'
-          package: ./RustDetector.api/bin/Release/net8.0/publish 
+          package: ./RustDetector.api/bin/Release/net8.0/publish
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_D3196DCE27274553A3C438185ECE00E7 }}
-          
-      - name: Checkout repository again
-        uses: actions/checkout@v2
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
+      - name: Download Frontend artifact
+        uses: actions/download-artifact@v2
         with:
-          node-version: '14'
-
-      - name: Install dependencies for Frontend (Blazor Server App)
-        run: |
-          cd RustDetector.blazor
-          npm install
-
-      - name: Build Frontend (Blazor Server App)
-        run: |
-          cd RustDetector.blazor
-          dotnet build
-
-      - name: Publish Frontend (Blazor Server App)
-        run: |
-          cd RustDetector.blazor
-          dotnet publish -c Release -o bin/Release/net8.0/publish
+          name: frontend-artifact
 
       - name: Deploy Frontend to Azure Web App
         uses: azure/webapps-deploy@v2
