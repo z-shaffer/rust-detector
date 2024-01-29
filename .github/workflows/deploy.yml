@@ -27,13 +27,18 @@ jobs:
 
       - name: dotnet publish Backend (ASP.NET Core)
         run: |
-          dotnet publish ./RustDetector.api/RustDetector.api.csproj -c Release -o /backend
+          cd RustDetector.api
+          echo "Contents of the directory before publish:"
+          ls -R .
+          dotnet publish RustDetector.api.csproj -c Release -o ${{env.DOTNET_ROOT}}/backend
+          echo "Contents of the directory after publish:"
+          ls -R ${{env.DOTNET_ROOT}}/backend
 
       - name: Upload backend artifact for deployment
         uses: actions/upload-artifact@v2
         with:
           name: backend-artifact
-          path: /backend
+          path: ${{env.DOTNET_ROOT}}/backend
 
       - name: dotnet build Frontend (Blazor Server App)
         run: |
