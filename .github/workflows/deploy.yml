@@ -27,7 +27,7 @@ jobs:
       - name: Publish Backend (ASP.NET Core)
         run: |
           cd RustDetector.api
-          dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/backend
+          dotnet publish -c Release -o bin/Release/net8.0/publish
 
       - name: Upload artifact for backend deployment
         uses: actions/upload-artifact@v2
@@ -76,7 +76,7 @@ jobs:
       - name: Publish Frontend (Blazor Server App)
         run: |
           cd RustDetector.blazor
-          dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/frontend
+          dotnet publish -c Release -o bin/Release/net8.0/publish
 
       - name: Deploy Frontend to Azure Web App
         uses: azure/webapps-deploy@v2
