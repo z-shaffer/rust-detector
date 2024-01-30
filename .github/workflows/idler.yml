@@ -24,4 +24,4 @@ jobs:
 
     - name: Run script
       run: |
-          python anti-idler.py
+          python anti-idle.py
