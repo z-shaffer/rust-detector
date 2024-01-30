@@ -24,4 +24,4 @@ jobs:
 
     - name: Run script
       run: |
-          python rust-detector.py
+          python anti-idler.py
