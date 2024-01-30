@@ -46,7 +46,7 @@ public class EntityFrameworkJobDataRepository(JobDataContext context, IMemoryCac
     
    public async Task InitializeAsync()
    {
-       TimeSpan initDelay = TimeSpan.FromSeconds(30);
+       TimeSpan initDelay = TimeSpan.FromSeconds(2);
        await Task.Delay(initDelay);
        IEnumerable<JobData> cachedData = await context.JobDataSet.AsNoTracking().ToListAsync();
        cache.Set(DataKey, cachedData, _cacheExpiration);
