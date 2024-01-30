@@ -14,7 +14,6 @@ namespace RustDetector.api.DataMigrations
     [Migration("20240121134337_InitialCreate")]
     partial class InitialCreate
     {
-        /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618

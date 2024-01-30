@@ -4,10 +4,9 @@
 
 namespace RustDetector.api.DataMigrations
 {
-    /// <inheritdoc />
     public partial class InitialCreate : Migration
     {
-        /// <inheritdoc />
+        // Define the changes to be made when migrating up
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
@@ -27,8 +26,7 @@ namespace RustDetector.api.DataMigrations
                     table.PrimaryKey("PK_JobDataSet", x => x.Id);
                 });
         }
-
-        /// <inheritdoc />
+        // Define the changes to be made when rolling back migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(

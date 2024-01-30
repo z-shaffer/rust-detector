@@ -14,5 +14,6 @@ public class JobData
     public int RustCount { get; set; }
     public int GoCount { get; set; }
     public int PythonCount { get; set; }
+    // C++ count currently not working on data source. Using Golang as a temporary substitute
     // public int cppCount { get; set; }
 }

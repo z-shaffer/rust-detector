@@ -1,7 +1,7 @@
 using RustDetector.api.Entities;
 
 namespace RustDetector.api.Repositories;
-
+// Interface for any potential future repositories 
 public interface IJobDataRepository
 {
     Task<IEnumerable<JobData>> GetAllAsync();

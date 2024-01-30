@@ -46,12 +46,15 @@
 
     private IEnumerable<JobData>? _jobDataSet = Array.Empty<JobData>();
 
+    
     private async Task RefreshJobDataSet()
     {
+        // Get request to api
         HttpClient httpClient = new HttpClient();
         HttpResponseMessage response = await httpClient.GetAsync(_apiUrl);
         httpClient.Dispose();
         using var responseStream = await response.Content.ReadAsStreamAsync();
+        // Deserialize response from json
         _jobDataSet = await JsonSerializer.DeserializeAsync<IEnumerable<JobData>>(responseStream);
     }
 

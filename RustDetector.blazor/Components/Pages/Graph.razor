@@ -13,7 +13,6 @@
 </div>
 
 @code {
-    
     public class JobData
     {
         public int id { get; set; }
@@ -30,19 +29,19 @@
     
     private async Task InitializeGraph()
     {
+        // Get request to api
         HttpClient httpClient = new HttpClient();
         HttpResponseMessage response = await httpClient.GetAsync(_apiUrl);
         httpClient.Dispose();
         using var responseStream = await response.Content.ReadAsStreamAsync();
+        // Deserialize response from json
         _jobDataSet = await JsonSerializer.DeserializeAsync<IEnumerable<JobData>>(responseStream);
+        // Build the graph
         await JSRuntime.InvokeVoidAsync("initializeLineGraph", _jobDataSet);
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (firstRender)
-        {
-            await InitializeGraph();
-        }
+        await InitializeGraph();
     }
 }

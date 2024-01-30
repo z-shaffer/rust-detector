@@ -13,6 +13,7 @@ builder.Services.AddRazorComponents()
 builder.Services.AddHttpClient();
 var app = builder.Build();
 
+// API setup
 await app.Services.InitializeDbAsync();
 app.MapJobDataEndpoints();
 
@@ -24,11 +25,10 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+// Blazor setup
 app.UseHttpsRedirection();
-
 app.UseStaticFiles();
 app.UseAntiforgery();
-
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 

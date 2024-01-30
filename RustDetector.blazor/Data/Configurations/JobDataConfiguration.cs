@@ -7,6 +7,7 @@ namespace RustDetector.api.Data.Configurations;
 
 public class JobDataConfiguration : IEntityTypeConfiguration<JobData>
 {
+    // Playing with entity properties
     public void Configure(EntityTypeBuilder<JobData> builder)
     {
         builder.Property(jobData => jobData.Year)
