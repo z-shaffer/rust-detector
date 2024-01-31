@@ -1,8 +1,8 @@
-name: Rust Detector Scraper
+name: Azure Anti-Idler
 
 on:
   schedule:
-    - cron: '0 12 28-31 * *'
+    - cron: '*/19 * * * *'
 
 jobs:
   build:
@@ -20,12 +20,8 @@ jobs:
     - name: Install Dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements.txt
+        pip install requests
 
-    - name: Check if it is the last day of the month
+    - name: Run script
       run: |
-        if [ $(date +\%d -d tomorrow) -eq 1 ]; then
-          python rust-detector.py
-        else
-          echo "Not the last day of the month. Maybe tomorrow..."
-        fi
+          python anti-idle.py
