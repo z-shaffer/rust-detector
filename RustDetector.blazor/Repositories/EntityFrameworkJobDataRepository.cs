@@ -57,7 +57,7 @@ public class EntityFrameworkJobDataRepository(JobDataContext context, IMemoryCac
    public async Task InitializeAsync()
    {
        // Small delay while db connection establishes 
-       TimeSpan initDelay = TimeSpan.FromSeconds(2);
+       TimeSpan initDelay = TimeSpan.FromSeconds(5);
        await Task.Delay(initDelay);
        // Immediately fill cache with up to date data
        IEnumerable<JobData> cachedData = await context.JobDataSet.AsNoTracking().ToListAsync();
