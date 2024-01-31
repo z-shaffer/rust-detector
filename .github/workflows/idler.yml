@@ -2,7 +2,7 @@ name: Azure Anti-Idler
 
 on:
   schedule:
-    - cron: '*/19 * * * *'
+    - cron: '*/15 * * * *'
 
 jobs:
   build:
