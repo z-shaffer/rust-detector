@@ -11,6 +11,11 @@ The goal of this project is long term. Follow along with Rust's growth and see h
 
 The data also includes Golang, a general-purpose language developed with the support of Google, with systems programming also in mind.
 
+# Live
+
+To view the live website and all data recorded since December 2023, check here: https://rustdetector.azurewebsites.net/
+Note: This sever is currently running on the Azure free tier, and after so many clicks, Azure may disable it for the rest of the month.
+
 # Data
 
 The data source used for these job openings is https://www.devjobsscanner.com/
