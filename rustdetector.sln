@@ -1,7 +1,5 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RustDetector.api", "RustDetector.api\RustDetector.api.csproj", "{AD21A139-37B6-4C97-A5DF-9C9D3EA3B178}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RustDetector.blazor", "RustDetector.blazor\RustDetector.blazor.csproj", "{0F212657-4197-43B4-880D-AEB6F6729841}"
 EndProject
 Global
@@ -10,10 +8,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{AD21A139-37B6-4C97-A5DF-9C9D3EA3B178}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AD21A139-37B6-4C97-A5DF-9C9D3EA3B178}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AD21A139-37B6-4C97-A5DF-9C9D3EA3B178}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AD21A139-37B6-4C97-A5DF-9C9D3EA3B178}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0F212657-4197-43B4-880D-AEB6F6729841}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0F212657-4197-43B4-880D-AEB6F6729841}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0F212657-4197-43B4-880D-AEB6F6729841}.Release|Any CPU.ActiveCfg = Release|Any CPU
