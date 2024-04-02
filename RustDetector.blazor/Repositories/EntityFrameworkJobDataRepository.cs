@@ -18,7 +18,7 @@ public class EntityFrameworkJobDataRepository(JobDataContext context, IMemoryCac
         // This is a safety net
         if (!cache.TryGetValue(DataKey, out IEnumerable<JobData> cachedData))
         {
-            // Fill the cache with up to date data from db
+            // Fill the cache with current data from db
             cachedData = await context.JobDataSet.AsNoTracking().ToListAsync();
             cache.Set(DataKey, cachedData, _cacheExpiration);
         }
@@ -26,7 +26,7 @@ public class EntityFrameworkJobDataRepository(JobDataContext context, IMemoryCac
         return cachedData;
     }
 
-    // For manual API GET requestss, so does not need a cache
+    // For manual API GET requests, so does not need a cache
     public async Task<JobData?> GetAsync(int id)
     {
         return await context.JobDataSet.FindAsync(id);
@@ -56,18 +56,8 @@ public class EntityFrameworkJobDataRepository(JobDataContext context, IMemoryCac
     // On entity init
    public async Task InitializeAsync()
    {
-       // Small delay while db connection establishes 
-       TimeSpan initDelay = TimeSpan.FromSeconds(5);
-       await Task.Delay(initDelay);
        // Immediately fill cache with up to date data
        IEnumerable<JobData> cachedData = await context.JobDataSet.AsNoTracking().ToListAsync();
        cache.Set(DataKey, cachedData, _cacheExpiration);
-       // Check for new data every 24 hours and fill the cache
-       while (true)
-       {
-           await Task.Delay(_cacheExpiration);
-           cachedData = await context.JobDataSet.AsNoTracking().ToListAsync();
-           cache.Set(DataKey, cachedData, _cacheExpiration);
-       }
    }
 }
